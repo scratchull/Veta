@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Veta</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Groups</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="testing">Testing</string>
+    <string name="map">Map</string>
+    <string name='api_key'>AIzaSyCrs5jeeBKjWV33eMikbusQTfS-UgfvEW4</string>
+    <string name="error">Google Api key is missing.</string>
+    <string name="enter_location">Enter Location</string>
+    <string name="auto_complete_text">Autocomplete textview with custom adapter.</string>
+    <string name="PLACES_API_KEY">AIzaSyBkVhZrjxQa14PfrRiDwuPoyVPHmtAwQnA</string>
+    <string name="GEO_API_KEY">AIzaSyDL_brA-eSzUGOJbjaodR-y9qQK-s4gFV8</string>
+
+</resources>
