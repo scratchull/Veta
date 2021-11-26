@@ -1,4 +1,4 @@
-package com.comp.sickbook.ui.map;
+package com.comp.veta.ui.map;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -35,8 +35,8 @@ import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
 
-import com.comp.sickbook.AppContext;
-import com.comp.sickbook.R;
+import com.comp.veta.AppContext;
+import com.comp.veta.R;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

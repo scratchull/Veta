@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog dialog;
     private int SIGN_IN_REQUEST_CODE = 123;
     private static String TAG = MainActivity.class.getSimpleName();
-    private FusedLocationProviderClient mFusedLocationClient;
+
 
     private FirebaseAuth mAuth;
 
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if (!Places.isInitialized()) {
-            Places.initialize(this, "AIzaSyBkVhZrjxQa14PfrRiDwuPoyVPHmtAwQnA");
+            Places.initialize(this, getString(R.string.PLACES_API_KEY));
 
         }
         setContentView(R.layout.activity_main);
