@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    DocumentReference userRef = db.collection("users").document(user.getUid());
+    DocumentReference userRef;
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         } else{
+            userRef = db.collection("users").document(user.getUid());
             if (user.getDisplayName()==null){
                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                         .setDisplayName("Guest")
@@ -104,23 +105,26 @@ public class MainActivity extends AppCompatActivity {
                 user.updateProfile(profileUpdates);
             }
 
-        }
+            userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (!document.exists()) {
+                            User newUser = new User(user.getDisplayName());
+                            userRef.set(newUser);
 
-        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (!document.exists()) {
-                        User newUser = new User(user.getDisplayName());
-                        userRef.set(newUser);
-
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        userRef.update("displayName",user.getDisplayName());
+            userRef.update("displayName",user.getDisplayName());
+
+
+
+
+        }
 
 
 

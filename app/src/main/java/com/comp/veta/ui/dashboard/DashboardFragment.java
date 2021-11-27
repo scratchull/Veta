@@ -74,7 +74,7 @@ public class DashboardFragment extends Fragment {
     DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    DocumentReference userRef = db.collection("users").document(user.getUid());
+    DocumentReference userRef;
     String gString;
     String userID;
     int numGroups;
@@ -96,6 +96,10 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (user!=null){
+            userRef = db.collection("users").document(user.getUid());
+        }
 
        createPopup = getLayoutInflater().inflate(R.layout.create_popup, null,false);
          groupImage = createPopup.findViewById(R.id.groupImage);
