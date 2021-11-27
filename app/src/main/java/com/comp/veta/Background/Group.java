@@ -4,68 +4,91 @@ import java.util.ArrayList;
 
 public class Group {
 
+
+    private ArrayList<String> userIDs = new ArrayList<>();
+    private boolean hasPassword;
+    private String password;
+    private String photoURL;
     private String name;
     private int numPeople;
-    private ArrayList<String> peopleID = new ArrayList<>();
-    private String password;
-    private int numComplete;
-    private int numBadComplete;
 
-    public int getNumBadComplete() {
-        return numBadComplete;
-    }
 
-    public void setNumBadComplete(int numBadComplete) {
-        this.numBadComplete = numBadComplete;
-    }
-
-    public void setNumComplete(int numComplete) {
-        this.numComplete = numComplete;
-    }
-
-    public int getNumComplete() {
-        return numComplete;
-    }
-
-    public Group (){
+    public Group() {
 
     }
-    public Group(String theName, String pass){
+
+    public Group(String theName, String pass) {
         name = theName;
-        password =  pass;
+        password = pass;
         numPeople = 0;
 
+    }
+
+    public Group(String thename, Boolean hasPass, String pass) {
+        name = thename;
+        hasPassword = hasPass;
+        password = pass;
+
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getPassword() {
         return password;
     }
 
-
-
-    public int getNumPeople(){
-        return numPeople;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getName() {
         return name;
     }
 
-    public ArrayList<String> getPeopleID() {
-        return peopleID;
+    public void setNumPeople(int numPeople) {
+        this.numPeople = numPeople;
     }
 
-    public void addPerson(String ID){
-        peopleID.add(ID);
+    public int getNumPeople() {
+        return numPeople;
+    }
+
+    public ArrayList<String> getUserIDs() {
+        return userIDs;
+    }
+
+    public void setUserIDs(ArrayList<String> userIDs) {
+        this.userIDs = userIDs;
+    }
+
+
+    public void addPerson(String ID) {
+        userIDs.add(ID);
         numPeople++;
-
     }
-    public void removePerson(String ID){
-        peopleID.remove(ID);
+
+    public void removePerson(String ID) {
+        userIDs.remove(ID);
         numPeople--;
     }
 
+    public boolean isHasPassword() {
+        return hasPassword;
+    }
 
+    public void setHasPassword(boolean hasPassword) {
+        this.hasPassword = hasPassword;
+    }
+
+    public String getPhotoURL() {
+        return photoURL;
+    }
+
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
+    }
 
 
 }

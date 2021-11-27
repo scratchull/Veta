@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.comp.veta.ui.map.PolylineData;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Polyline;
@@ -67,7 +68,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClick
 
     private static String TAG = MapFragment.class.getSimpleName();
 
-    private ArrayList < PolylineData > mPolylineData = new ArrayList < > (); // Creates arraylist that will store information about polyline in a parallel array based way
+    private ArrayList <PolylineData> mPolylineData = new ArrayList < > (); // Creates arraylist that will store information about polyline in a parallel array based way
     private GeoApiContext mGeoApiContext;// Create the object that will read the API key and connect to to the Geocoding API
     MapView mMapView; // creates the map view
     private GoogleMap googleMap; //creates the programmable map

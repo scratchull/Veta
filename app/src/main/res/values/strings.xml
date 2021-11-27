@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Veta</string>
-    <string name="title_home">Home</string>
+    <string name="title_profile">Profile</string>
     <string name="title_dashboard">Groups</string>
     <string name="title_notifications">Notifications</string>
     <string name="testing">Testing</string>
