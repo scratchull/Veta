@@ -5,10 +5,12 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,6 +37,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import com.comp.veta.AppContext;
@@ -62,8 +65,10 @@ import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 
 /**
  * Class for the fragment which houses the groups section
@@ -75,16 +80,13 @@ public class DashboardFragment extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     DocumentReference userRef;
-    String gString;
-    String userID;
-    int numGroups;
+
     View root;
     LinearLayout list;
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
-    Handler handler = new Handler();
-    Runnable runnable;
-    String meetUpGroup;
+
+
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
     View createPopup;
@@ -97,12 +99,12 @@ public class DashboardFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (user!=null){
+        if (user != null) {
             userRef = db.collection("users").document(user.getUid());
         }
 
-       createPopup = getLayoutInflater().inflate(R.layout.create_popup, null,false);
-         groupImage = createPopup.findViewById(R.id.groupImage);
+        createPopup = getLayoutInflater().inflate(R.layout.create_popup, null, false);
+        groupImage = createPopup.findViewById(R.id.groupImage);
         mGetPhotoContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 new ActivityResultCallback<Uri>() {
                     @Override
@@ -115,7 +117,6 @@ public class DashboardFragment extends Fragment {
                 });
 
     }
-
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -135,145 +136,134 @@ public class DashboardFragment extends Fragment {
         });
 
 
-
-
-
         return root;
     }
 
 
-
     public void makeGroupList() {
-        FirebaseInstallations.getInstance().getId() // attempt to get unique firebase user ID
-                .addOnCompleteListener(new OnCompleteListener < String > () {
-                    @Override
-                    public void onComplete(@NonNull Task < String > task) { // process here is very similar to the one in makeNotifyGroupPopup
-                        if (task.isSuccessful()) {
 
-                            userID = task.getResult(); //gets firebase ID, unique to user's device
-                            DatabaseReference userRef = rootRef.child("people").child(userID);
+        if(user!= null) {
+            userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                            userRef.child("test").setValue("game");
+                    User vUser = documentSnapshot.toObject(User.class);
+                    if (vUser != null && vUser.getGroupIDs() != null) {
+                        ArrayList<String> groupArray = vUser.getGroupIDs();
 
-                            ValueEventListener eventListener = new ValueEventListener() {
+
+                        for (int inx = 0; inx < groupArray.size(); inx++) { // goes through each group the user is in
+
+                            View view = LayoutInflater.from(AppContext.getAppContext()).inflate(R.layout.group_temp, null); //inflates the group_temp layout into a view
+                            TextView textTest = view.findViewById(R.id.notify_group_name); // Links UI elements to objects
+                            TextView sideNote = view.findViewById(R.id.notif_text);
+                            ImageView groupPreImage = view.findViewById(R.id.groupPreImage);
+
+                            DocumentReference tempGroupRef = db.collection("groups").document(groupArray.get(inx));
+                            int listIndex = inx;
+                            tempGroupRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.child("numGroups").getValue() == null) {
-                                        userRef.child("numGroups").setValue(0); //Gives reference a value so not null
-                                    }
-                                    if (dataSnapshot.child("groupString").getValue() == null) {
-                                        userRef.child("groupString").setValue(""); //Gives reference a value so not null
-                                    }
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                                    gString = dataSnapshot.child("groupString").getValue(String.class);
+                                    Group tempGroup = documentSnapshot.toObject(Group.class);
 
-                                    if (dataSnapshot.child("numGroups").getValue() != null)
-                                        numGroups = dataSnapshot.child("numGroups").getValue(Integer.class);
-
-                                    int base = 0;
-                                    for (int x = 0; x < numGroups; x++) { // goes through each group the user is in
-
-                                        View view = LayoutInflater.from(AppContext.getAppContext()).inflate(R.layout.group_temp, null); //inflates the group_temp layout into a view
-                                        TextView textTest = view.findViewById(R.id.notify_group_name); // Links UI elements to objects
-                                        TextView sideNote = view.findViewById(R.id.notif_text);
-
-                                        view.setOnClickListener(new View.OnClickListener() { // adds an on click listener for each group view in the list
-                                            @Override
-                                            public void onClick(View v) {
-                                                dialogBuilder = new AlertDialog.Builder(getContext()); //makes a popup when clicked
-                                                final View optionsPopup = getLayoutInflater().inflate(R.layout.options_popup, null); // inflates the options layout into a view for the popup
-
-                                                Button removeButton = optionsPopup.findViewById(R.id.startSurvey);
-
-                                                removeButton.setOnClickListener(new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View v) { // removes the group from the list and also the firebase
-
-                                                        String name = textTest.getText().toString();
-                                                        if (gString.contains(name + ",")) {
-                                                            int i = gString.indexOf(name + ",");
-                                                            gString = gString.substring(0, i) + gString.substring(i + name.length() + 1);
-                                                            numGroups--;
-                                                            userRef.child("groupString").setValue(gString);
-                                                            userRef.child("numGroups").setValue(numGroups);
-                                                        }
-
-                                                        removeGroup(name);
-                                                        dialog.dismiss(); // closes the group options popup
-                                                        list.removeAllViews();
-                                                        makeGroupList(); //refresh the list
-                                                    }
-                                                });
-
-                                                Button meetupButton = optionsPopup.findViewById(R.id.startMeetupButton);
-                                                meetupButton.setOnClickListener(new View.OnClickListener() {
-
-                                                    @Override
-                                                    public void onClick(View v) { // Starts the meet up for that group (includes a survey and mask check)
-
-                                                        dialog.dismiss(); // closes the options popup
-                                                        final View meetUpPopup = getLayoutInflater().inflate(R.layout.meetup_popup, null); // inflates the meetup popup into a view
-
-                                                        Button maskCheck = meetUpPopup.findViewById(R.id.startMeetupButton);
-                                                        maskCheck.setOnClickListener(new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View v) {
-                                                                meetUpGroup = textTest.getText().toString();;
-                                                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                                                startActivityForResult(intent, 0); // starts the picture taking process, will run onActivityResult when finished
-
-
-
-                                                            }
-                                                        });
-                                                        dialogBuilder.setView(meetUpPopup);
-                                                        dialog = dialogBuilder.create();
-                                                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                                        dialog.show();  // shows the meet up popup
-
-                                                    }
-                                                });
-
-                                                dialogBuilder.setView(optionsPopup);
-                                                dialog = dialogBuilder.create();
-                                                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                                dialog.show(); // shows the group options popup
-
-                                            }
-                                        });
-                                        int i = gString.indexOf(",", base);
-                                        String groupNameInView = gString.substring(base, i);
-                                        base = i + 1;
-                                        textTest.setText(groupNameInView);
-
-                                        DocumentReference docRef = db.collection("groups").document(groupNameInView);
-                                        docRef.get().addOnSuccessListener(new OnSuccessListener < DocumentSnapshot > () {
-                                            @Override
-                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-
-                                                Group group = documentSnapshot.toObject(Group.class);
-                                                sideNote.setText("Number Of People In Group: " + group.getNumPeople()); // Lets the usder know how many people are in that group
-
-                                            }
-                                        });
-
-                                        list.addView(view); // ats the view to the scrolling view
+                                    if (tempGroup != null) {
+                                        Picasso.get().load(tempGroup.getPhotoURL())
+                                                .centerCrop()
+                                                .resize(150, 150)
+                                                .into(groupPreImage);
+                                        textTest.setText(tempGroup.getName());
+                                        sideNote.setText(tempGroup.getNumPeople() + " People");
 
                                     }
+
                                 }
+                            });
+                            list.addView(view, listIndex);
+
+                    /*
+                    view.setOnClickListener(new View.OnClickListener() { // adds an on click listener for each group view in the list
+                        @Override
+                        public void onClick(View v) {
+                            dialogBuilder = new AlertDialog.Builder(getContext()); //makes a popup when clicked
+                            final View optionsPopup = getLayoutInflater().inflate(R.layout.options_popup, null); // inflates the options layout into a view for the popup
+
+                            Button removeButton = optionsPopup.findViewById(R.id.startSurvey);
+
+                            removeButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) { // removes the group from the list and also the firebase
+
+                                    String name = textTest.getText().toString();
+                                    if (gString.contains(name + ",")) {
+                                        int i = gString.indexOf(name + ",");
+                                        gString = gString.substring(0, i) + gString.substring(i + name.length() + 1);
+                                        numGroups--;
+                                        userRef.child("groupString").setValue(gString);
+                                        userRef.child("numGroups").setValue(numGroups);
+                                    }
+
+                                    removeGroup(name);
+                                    dialog.dismiss(); // closes the group options popup
+                                    list.removeAllViews();
+                                    makeGroupList(); //refresh the list
+                                }
+                            });
+
+                            Button meetupButton = optionsPopup.findViewById(R.id.startMeetupButton);
+                            meetupButton.setOnClickListener(new View.OnClickListener() {
 
                                 @Override
-                                public void onCancelled(DatabaseError databaseError) {}
-                            };
+                                public void onClick(View v) { // Starts the meet up for that group (includes a survey and mask check)
 
-                            userRef.addListenerForSingleValueEvent(eventListener);
-                        } else {
-                            Log.e("Installations", "Unable to get Installation ID");
+                                    dialog.dismiss(); // closes the options popup
+                                    final View meetUpPopup = getLayoutInflater().inflate(R.layout.meetup_popup, null); // inflates the meetup popup into a view
+
+                                    Button maskCheck = meetUpPopup.findViewById(R.id.startMeetupButton);
+                                    maskCheck.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            meetUpGroup = textTest.getText().toString();;
+                                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                            startActivityForResult(intent, 0); // starts the picture taking process, will run onActivityResult when finished
+
+
+
+                                        }
+                                    });
+                                    dialogBuilder.setView(meetUpPopup);
+                                    dialog = dialogBuilder.create();
+                                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                    dialog.show();  // shows the meet up popup
+
+                                }
+                            });
+
+                            dialogBuilder.setView(optionsPopup);
+                            dialog = dialogBuilder.create();
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            dialog.show(); // shows the group options popup
+
+                        }
+                    });
+
+                     */
+
+
                         }
                     }
-                });
+
+
+                }
+            });
+        }
+
     }
 
+
+
+
+                        /*
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -365,7 +355,7 @@ public class DashboardFragment extends Fragment {
 
     }
 
-
+                         */
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -382,9 +372,8 @@ public class DashboardFragment extends Fragment {
         groupImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_add));
 
 
-
-        if (createPopup.getParent()!= null){
-            ((ViewGroup)createPopup.getParent()).removeView(createPopup);
+        if (createPopup.getParent() != null) {
+            ((ViewGroup) createPopup.getParent()).removeView(createPopup);
         }
         dialogBuilder.setView(createPopup);
         dialog = dialogBuilder.create();
@@ -401,11 +390,11 @@ public class DashboardFragment extends Fragment {
         passwordSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(passwordSwitch.isChecked()){
+                if (passwordSwitch.isChecked()) {
                     enterPassword.setVisibility(View.VISIBLE);
-                }else
+                } else
                     enterPassword.setVisibility(View.INVISIBLE);
-                    enterPassword.setText("");
+                enterPassword.setText("");
 
             }
         });
@@ -435,7 +424,7 @@ public class DashboardFragment extends Fragment {
                 String password = enterPassword.getText().toString();
                 Boolean hasPassword = passwordSwitch.isChecked();
 
-                if (!name.equals("") && (!hasPassword || !password.equals("") )) {
+                if (!name.equals("") && (!hasPassword || !password.equals(""))) {
                     ProgressDialog progress = new ProgressDialog(getActivity());
                     progress.setTitle("Loading");
                     progress.setMessage("Please wait while the group is made");
@@ -454,10 +443,17 @@ public class DashboardFragment extends Fragment {
 
                             StorageReference groupRef = storageRef.child("groups/" + groupID + "/groupImage.png");
 
-                            Bitmap bitmap = ((BitmapDrawable) groupImage.getDrawable()).getBitmap();
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                            byte[] data = baos.toByteArray();
+                            Bitmap bitmap;
+                            if (groupImage.getDrawable() instanceof VectorDrawable) {
+                                bitmap = BitmapFactory.decodeResource(getActivity().getResources(),
+                                        R.drawable.logo);
+
+                            }else{
+                                bitmap = ((BitmapDrawable) groupImage.getDrawable()).getBitmap();
+                            }
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                                byte[] data = baos.toByteArray();
 
                             UploadTask uploadTask = groupRef.putBytes(data);
                             Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -475,9 +471,10 @@ public class DashboardFragment extends Fragment {
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     if (task.isSuccessful()) {
                                         Uri downloadUri = task.getResult();
-                                      db.collection("groups").document(groupID).update("photoURL", ""+downloadUri);
-                                      progress.dismiss();
-
+                                        db.collection("groups").document(groupID).update("photoURL", "" + downloadUri);
+                                        list.removeAllViews();
+                                        makeGroupList(); //refresh
+                                        progress.dismiss();
 
                                     } else {
                                         Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
@@ -485,16 +482,12 @@ public class DashboardFragment extends Fragment {
                                 }
                             });
 
-
-
-                            list.removeAllViews();
-                            makeGroupList(); //refresh
                             dialog.dismiss(); //closes the create group popup
                         }
                     });
 
 
-                    //             Group group = documentSnapshot.toObject(Group.class);
+
                 }
 
             }
@@ -505,10 +498,7 @@ public class DashboardFragment extends Fragment {
     }
 
 
-
-
-
-
+    /*
     public void removeGroup(String groupName) {
         DocumentReference docRef = db.collection("groups").document(groupName);
         docRef.get().addOnSuccessListener(new OnSuccessListener < DocumentSnapshot > () {
@@ -531,6 +521,8 @@ public class DashboardFragment extends Fragment {
 
         });
     }
+
+     */
 
 
 }

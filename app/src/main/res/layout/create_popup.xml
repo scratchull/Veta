@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize25Percent"
         app:srcCompat="@drawable/ic_add"
         app:strokeColor="@color/blue_hint"
         app:strokeWidth="5dp" />

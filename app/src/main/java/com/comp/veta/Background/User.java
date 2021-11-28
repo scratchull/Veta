@@ -29,12 +29,13 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-    public ArrayList<String> getGroupArray() {
+
+    public ArrayList<String> getGroupIDs() {
         return groupIDs;
     }
 
-    public void setGroupArray(ArrayList<String> groupArray) {
-        this.groupIDs = groupArray;
+    public void setGroupIDs(ArrayList<String> groupIDs) {
+        this.groupIDs = groupIDs;
     }
 
 

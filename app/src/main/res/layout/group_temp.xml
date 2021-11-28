@@ -7,18 +7,25 @@
 
     <LinearLayout
         android:id="@+id/group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
         android:background="@drawable/group_border"
         android:orientation="horizontal"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.515"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499">
+        app:layout_constraintTop_toTopOf="parent">
 
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/groupPreImage"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize25Percent"
+            app:srcCompat="@drawable/notify_group_list_bg" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,14 +39,13 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:gravity="bottom"
-                android:text="Name/Group"
                 android:textColor="@color/black"
                 android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/notif_text"
-                android:layout_width="389dp"
-                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:textSize="18sp" />
