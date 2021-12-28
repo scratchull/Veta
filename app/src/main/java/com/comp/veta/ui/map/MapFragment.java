@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.comp.veta.ui.map.PolylineData;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -635,7 +636,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClick
                 }
 
                 // Add the refresh button Button from frament_map.xml to the Map screen and allow it to be programmable
-                @SuppressLint("WrongViewCast") AppCompatImageButton refreshButton = (AppCompatImageButton) rootView.findViewById(R.id.btn_reset_map);
+                AppCompatImageButton refreshButton = rootView.findViewById(R.id.btn_reset_map);
 
                 /**
                  * This checks to see if the refresh button is pressed

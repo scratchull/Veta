@@ -9,7 +9,13 @@
         android:id="@+id/navigation_dashboard"
         android:name="com.comp.veta.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+
+        <action
+            android:id="@+id/action_navigation_dashboard_to_navigation_messages"
+            app:destination="@id/navigation_messages"
+            app:enterAnim="@anim/fui_slide_out_left" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.comp.veta.ui.profile.ProfileFragment"
@@ -21,4 +27,14 @@
         android:name="com.comp.veta.ui.map.MapFragment"
         android:label="Map"
         tools:layout="@layout/fragment_map" />
+    <fragment
+        android:id="@+id/navigation_messages"
+        android:name="com.comp.veta.ui.dashboard.MessagesView"
+        android:label="Messages"
+        tools:layout="@layout/fragment_messages" >
+
+        <argument
+            android:name="groupID"
+            app:argType="string" />
+    </fragment>
 </navigation>

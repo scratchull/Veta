@@ -25,7 +25,7 @@
         app:strokeWidth="5dp" />
 
     <EditText
-        android:id="@+id/groupNameText"
+        android:id="@+id/groupCodeEditText"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="24dp"
@@ -35,7 +35,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/groupImage" />
+        app:layout_constraintTop_toBottomOf="@+id/groupImage"
+        android:inputType="text"/>
 
     <EditText
         android:id="@+id/groupPassword"
@@ -47,31 +48,33 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordSwitch" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordSwitch"
+        android:inputType="textPassword"/>
 
-    <Button
-        android:id="@+id/createButton"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/cancelCreateGroupButton"
         android:layout_width="105dp"
         android:layout_height="42dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="28dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/buttons"
-        android:text="Create"
-        android:textColor="#FBFBFB"
+        android:text="Cancel"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/groupPassword"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:inputType="text"/>
 
-    <Button
-        android:id="@+id/cancelCreateButton"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/createGroupButton"
         android:layout_width="105dp"
         android:layout_height="42dp"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="36dp"
         android:background="@drawable/buttons"
-        android:text="Cancel"
+        android:text="Create"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/groupPassword" />
@@ -90,6 +93,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/groupNameText" />
+        app:layout_constraintTop_toBottomOf="@+id/groupCodeEditText" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

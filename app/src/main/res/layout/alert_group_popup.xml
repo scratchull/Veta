@@ -52,7 +52,7 @@
         app:layout_constraintVertical_bias="0.194" />
 
     <EditText
-        android:id="@+id/groupNameText"
+        android:id="@+id/groupCodeEditText"
         android:layout_width="match_parent"
         android:layout_height="59dp"
         android:layout_marginTop="20dp"
@@ -72,7 +72,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/groupNameText"
+        app:layout_constraintTop_toBottomOf="@+id/groupCodeEditText"
         app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout

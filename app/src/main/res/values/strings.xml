@@ -11,5 +11,6 @@
     <string name="auto_complete_text">Autocomplete textview with custom adapter.</string>
     <string name="PLACES_API_KEY">AIzaSyBkVhZrjxQa14PfrRiDwuPoyVPHmtAwQnA</string>
     <string name="GEO_API_KEY">AIzaSyDL_brA-eSzUGOJbjaodR-y9qQK-s4gFV8</string>
+    <string name="GROUP_ID">groupID</string>
 
 </resources>

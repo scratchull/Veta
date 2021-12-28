@@ -5,12 +5,23 @@ import java.util.ArrayList;
 public class Group {
 
 
-    private ArrayList<String> userIDs = new ArrayList<>();
+
     private boolean hasPassword;
     private String password;
     private String photoURL;
     private String name;
     private int numPeople;
+    private String groupID;
+
+    public String getGroupID() {
+        return groupID;
+    }
+
+    public void setGroupID(String groupID) {
+        this.groupID = groupID;
+    }
+
+
 
 
     public Group() {
@@ -55,22 +66,14 @@ public class Group {
         return numPeople;
     }
 
-    public ArrayList<String> getUserIDs() {
-        return userIDs;
-    }
 
-    public void setUserIDs(ArrayList<String> userIDs) {
-        this.userIDs = userIDs;
-    }
-
-
-    public void addPerson(String ID) {
-        userIDs.add(ID);
+    public void addPerson() {
+      //  userIDs.add(ID);
         numPeople++;
     }
 
-    public void removePerson(String ID) {
-        userIDs.remove(ID);
+    public void removePerson() {
+      //  userIDs.remove(ID);
         numPeople--;
     }
 

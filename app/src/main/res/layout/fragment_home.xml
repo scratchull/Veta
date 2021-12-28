@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/SignOutButton"
         android:layout_width="215dp"
         android:layout_height="38dp"
@@ -31,20 +31,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ChangeNameButton"
-        app:layout_constraintVertical_bias="0.162" />
+        app:layout_constraintVertical_bias="0.102" />
 
-    <Button
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/ChangeNameButton"
         android:layout_width="215dp"
         android:layout_height="38dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="64dp"
         android:background="@drawable/buttons"
         android:text="Change Display Name"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/accountName" />
-
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ViewUserImage"
