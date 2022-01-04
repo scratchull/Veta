@@ -15,15 +15,15 @@
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/backButton"
+            android:id="@+id/backToDashButton"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:clickable="true"
+            android:focusable="true"
             android:scaleX="0.6"
             android:scaleY="0.6"
             android:tint="@color/white"
-            app:srcCompat="@drawable/ic_arrow_back"
-            android:focusable="true" />
+            app:srcCompat="@drawable/ic_arrow_back" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="45dp"
@@ -44,7 +44,6 @@
         </com.google.android.material.card.MaterialCardView>
 
 
-
         <TextView
             android:id="@+id/groupNameMessages"
             android:layout_width="0dp"
@@ -62,11 +61,11 @@
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:clickable="true"
+            android:focusable="true"
             android:scaleX="0.6"
             android:scaleY="0.6"
             android:tint="@color/white"
-            app:srcCompat="@drawable/ic_settings"
-            android:focusable="true" />
+            app:srcCompat="@drawable/ic_settings" />
 
     </LinearLayout>
 
@@ -85,6 +84,29 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sample"
+                android:textColor="#D52727"
+                android:textSize="96sp" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sample"
+                android:textColor="#1D37C6"
+                android:textSize="96sp" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sample"
+                android:textColor="#8A1ACF"
+                android:textSize="96sp" />
         </LinearLayout>
     </ScrollView>
 

@@ -5,16 +5,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.comp.veta.Background.Group;
 import com.comp.veta.R;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.badge.BadgeUtils;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -64,7 +67,13 @@ public class MessagesView extends Fragment {
         messageList = root.findViewById(R.id.messages_list);
         ImageView groupImage= root.findViewById(R.id.groupImageMessages);
         TextView groupNameDisplay = root.findViewById(R.id.groupNameMessages);
+        View backButton = root.findViewById(R.id.backToDashButton);
 
+
+        backButton.setOnClickListener(v -> {
+
+            Navigation.findNavController(v).navigate(R.id.action_navigation_messages_to_navigation_dashboard);
+        });
 
         groupRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -84,6 +93,7 @@ public class MessagesView extends Fragment {
 
             }
         });
+
 
 
 

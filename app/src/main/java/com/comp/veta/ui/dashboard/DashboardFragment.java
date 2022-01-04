@@ -44,6 +44,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -51,6 +53,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -60,7 +63,8 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class DashboardFragment extends Fragment {
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    static FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     DocumentReference userRef;
 
@@ -479,15 +483,18 @@ public class DashboardFragment extends Fragment {
             Group group = new Group(name, hasPassword, password);
             group.addPerson();
 
-            db.collection("groups").add(group).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            String strID = getRandomNumberString();
 
+
+
+                db.collection("groups").document(strID).set(group).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
-                public void onSuccess(DocumentReference documentReference) {
-                    String groupID = documentReference.getId();
-                    documentReference.update("groupID", documentReference.getId());
-                    userRef.update("groupIDs", FieldValue.arrayUnion(groupID));
+                public void onSuccess(Void unused) {
 
-                    StorageReference groupRef = storageRef.child("groups/" + groupID + "/groupImage.png");
+                    db.collection("groups").document(strID).update("groupID", strID);
+                    userRef.update("groupIDs", FieldValue.arrayUnion(strID));
+
+                    StorageReference groupRef = storageRef.child("groups/" + strID + "/groupImage.png");
 
                     Bitmap bitmap;
                     if (groupImage.getDrawable() instanceof VectorDrawable) {
@@ -517,7 +524,7 @@ public class DashboardFragment extends Fragment {
                         public void onComplete(@NonNull Task<Uri> task) {
                             if (task.isSuccessful()) {
                                 Uri downloadUri = task.getResult();
-                                db.collection("groups").document(groupID).update("photoURL", "" + downloadUri);
+                                db.collection("groups").document(strID).update("photoURL", "" + downloadUri);
                                 list.removeAllViews();
                                 makeGroupList(); //refresh
                                 progress.dismiss();
@@ -535,6 +542,43 @@ public class DashboardFragment extends Fragment {
 
 
         }
+
+    }
+
+
+    boolean docExists = true;
+    public static String getRandomNumberString() {
+
+
+        ArrayList<String> tempList = new ArrayList<>();
+
+        db.collection("groups").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                tempList.add(document.getId());
+                            }
+
+
+                        } else {
+                            //failed
+                        }
+                    }
+                });
+
+        Random rnd = new Random();
+        int num = rnd.nextInt(99999999);
+        String randID = String.format("%08d", num);
+
+        while(tempList.contains(randID)){
+            num = rnd.nextInt(99999999);
+            randID = String.format("%08d", num);
+        }
+
+
+        return randID;
 
     }
 

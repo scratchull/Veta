@@ -14,7 +14,8 @@
         <action
             android:id="@+id/action_navigation_dashboard_to_navigation_messages"
             app:destination="@id/navigation_messages"
-            app:enterAnim="@anim/fui_slide_out_left" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/navigation_home"
@@ -36,5 +37,10 @@
         <argument
             android:name="groupID"
             app:argType="string" />
+        <action
+            android:id="@+id/action_navigation_messages_to_navigation_dashboard"
+            app:destination="@id/navigation_dashboard"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right" />
     </fragment>
 </navigation>
