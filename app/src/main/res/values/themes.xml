@@ -27,6 +27,9 @@
 <style name="ShapeAppearanceOverlay.App.CornerSize25Percent" parent="">
 <item name="cornerSize">25%</item>
 </style>
+    <style name="VetaDialogTheme" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="colorPrimary">@color/blue_hint</item>
+    </style>
 
 
 

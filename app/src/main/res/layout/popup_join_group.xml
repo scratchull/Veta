@@ -10,17 +10,17 @@
 
     <EditText
         android:id="@+id/groupCodeEditText"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="60dp"
+        android:layout_width="311dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="46dp"
+        android:backgroundTint="@color/white"
         android:gravity="center_horizontal"
         android:hint="Unique Group Code"
+        android:inputType="number|text"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/joinGroupTitle"
-        android:inputType="text"/>
+        app:layout_constraintTop_toBottomOf="@+id/joinGroupTitle" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/joinButton"

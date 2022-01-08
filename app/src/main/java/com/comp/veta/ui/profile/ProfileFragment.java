@@ -2,6 +2,7 @@ package com.comp.veta.ui.profile;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -131,39 +132,43 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
 
                 if (user!= null){
-                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(), R.style.VetaDialogTheme);
 
                     alert.setTitle("Set Display Name");
                     alert.setMessage("This is the name others will see you as.");
 
                     // Set an EditText view to get user input
                     final EditText input = new EditText(getActivity());
+                    input.getBackground().setColorFilter(getResources().getColor(R.color.blue_hint),
+                            PorterDuff.Mode.SRC_ATOP);
                     alert.setView(input);
 
-                    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             String value = input.getText().toString();
 
-                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(value)
-                                    .build();
+                            if (!value.equals("")) {
+                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(value)
+                                        .build();
 
-                            user.updateProfile(profileUpdates)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getActivity(),"Name Changed", Toast.LENGTH_LONG).show();
-                                                getActivity().recreate();
+                                user.updateProfile(profileUpdates)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getActivity(), "Name Changed", Toast.LENGTH_LONG).show();
+                                                    getActivity().recreate();
+                                                }
                                             }
-                                        }
-                                    });
+                                        });
+                            }
                         }
                     });
 
                     alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            // Canceled.
+
                         }
                     });
 
