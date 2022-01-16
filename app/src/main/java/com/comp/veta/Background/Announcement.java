@@ -12,6 +12,12 @@ public class Announcement {
         time = t;
     }
 
+    public Announcement(String m, String s){
+        message = m;
+        sender = s;
+        time = "";
+    }
+
 
     public String getMessage() {
         return message;

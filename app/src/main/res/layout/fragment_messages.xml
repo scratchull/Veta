@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,107 +7,100 @@
     android:orientation="vertical"
     tools:context=".ui.dashboard.MessagesView">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/makeAnnButton"
+        android:layout_width="93dp"
+        android:layout_height="55dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:src="@drawable/ic_add"
+        app:backgroundTint="@color/teal_200"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/black"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/backToDashButton"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:focusable="true"
-            android:scaleX="0.6"
-            android:scaleY="0.6"
-            android:tint="@color/white"
-            app:srcCompat="@drawable/ic_arrow_back" />
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/black"
+            android:orientation="horizontal">
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
-            app:cardBackgroundColor="@color/white"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/backToDashButton"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleX="0.6"
+                android:scaleY="0.6"
+                android:tint="@color/white"
+                app:srcCompat="@drawable/ic_arrow_back" />
 
-            app:cardCornerRadius="10dp">
-
-            <ImageView
-                android:id="@+id/groupImageMessages"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/logo" />
+                android:layout_gravity="center"
+                app:cardBackgroundColor="@color/white"
+
+                app:cardCornerRadius="10dp">
+
+                <ImageView
+                    android:id="@+id/groupImageMessages"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/logo" />
 
 
-        </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.card.MaterialCardView>
 
 
-        <TextView
-            android:id="@+id/groupNameMessages"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:gravity="center|start"
-            android:text="Group"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/groupNameMessages"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:text="Group"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/groupSettingsButton"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:focusable="true"
-            android:scaleX="0.6"
-            android:scaleY="0.6"
-            android:tint="@color/white"
-            app:srcCompat="@drawable/ic_settings" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/groupSettingsButton"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleX="0.6"
+                android:scaleY="0.6"
+                android:tint="@color/white"
+                app:srcCompat="@drawable/ic_settings" />
+
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/messages_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="5dp" />
-
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:id="@+id/messages_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sample"
-                android:textColor="#D52727"
-                android:textSize="96sp" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sample"
-                android:textColor="#1D37C6"
-                android:textSize="96sp" />
-
-            <TextView
-                android:id="@+id/textView16"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sample"
-                android:textColor="#8A1ACF"
-                android:textSize="96sp" />
-        </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

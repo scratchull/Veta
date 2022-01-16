@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,10 +26,12 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.comp.veta.Background.Announcement;
 import com.comp.veta.Background.Group;
 import com.comp.veta.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.badge.BadgeUtils;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,6 +40,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 
 public class MessagesView extends Fragment {
@@ -47,9 +53,11 @@ public class MessagesView extends Fragment {
     DocumentReference groupRef;
 
     View root;
+    View makeAnnPopup;
     LinearLayout messageList;
     private AlertDialog.Builder dialogBuilder ;
     private AlertDialog dialog;
+
 
     private String groupCode;
 
@@ -60,6 +68,7 @@ public class MessagesView extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dialogBuilder = new AlertDialog.Builder(getContext());
+        makeAnnPopup = getLayoutInflater().inflate(R.layout.popup_make_announcement, null, false);
 
         if (user != null) {
             userRef = db.collection("users").document(user.getUid());
@@ -84,7 +93,13 @@ public class MessagesView extends Fragment {
 
 
 
+        FloatingActionButton makeAnnButton = root.findViewById((R.id.makeAnnButton));
 
+        makeAnnButton.setOnClickListener(v -> {
+
+            makeAnnUI();
+
+        });
 
         View backButton = root.findViewById(R.id.backToDashButton);
 
@@ -125,8 +140,86 @@ public class MessagesView extends Fragment {
 
 
 
+        makeAnnouncementList();
+
 
         return root;
+    }
+    public void makeAnnUI(){
+        EditText messageText = (EditText) makeAnnPopup.findViewById(R.id.annEditText);
+        Button closeDialogButton = (Button) makeAnnPopup.findViewById(R.id.cancelMakeAnnButton);
+        Button createAnnButton = (Button) makeAnnPopup.findViewById(R.id.createAnnButton);
+
+
+        closeDialogButton.setOnClickListener(v ->{
+            dialog.dismiss();
+        });
+
+        createAnnButton.setOnClickListener(v ->{
+            String text = messageText.getText().toString();
+            if(!text.equals("")) {
+                Announcement announcement = new Announcement(text, user.getDisplayName());
+                groupRef.update("announcements", FieldValue.arrayUnion(announcement));
+                messageList.removeAllViews();
+                makeAnnouncementList();
+                dialog.dismiss();
+
+            }
+        });
+
+        if (makeAnnPopup.getParent() != null) {
+            ((ViewGroup) makeAnnPopup.getParent()).removeView(makeAnnPopup);
+        }
+        dialogBuilder.setView(makeAnnPopup);
+        dialog = dialogBuilder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+
+    }
+
+    public void makeAnnouncementList(){
+
+        groupRef.get().addOnSuccessListener(documentSnapshot -> {
+
+            Group group = documentSnapshot.toObject(Group.class);
+
+            if (group != null) {
+                ArrayList<Announcement> announcements = group.getAnnouncements();
+
+                for (int inx = 0; inx < announcements.size(); inx++) {
+
+                    View view = getLayoutInflater().inflate(R.layout.temp_announcement, null);
+                    TextView senderText = view.findViewById(R.id.ann_sender); // Links UI elements to objects
+                    TextView messageText = view.findViewById(R.id.ann_text);
+
+                    senderText.setText(announcements.get(inx).getSender());
+                    messageText.setText(announcements.get(inx).getMessage());
+
+
+
+
+
+
+                    messageList.addView(view, inx);
+
+
+
+
+
+                }
+
+
+
+
+            }
+
+        });
+
+
+
+
     }
 
 

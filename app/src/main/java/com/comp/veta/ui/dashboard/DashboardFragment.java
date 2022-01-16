@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.VectorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -88,6 +89,7 @@ public class DashboardFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         if (user != null) {
             userRef = db.collection("users").document(user.getUid());
         }
@@ -114,6 +116,7 @@ public class DashboardFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
 
 
         root = inflater.inflate(R.layout.fragment_dashboard, container, false);
@@ -185,78 +188,7 @@ public class DashboardFragment extends Fragment {
                                 Navigation.findNavController(v).navigate(R.id.action_navigation_dashboard_to_navigation_messages, bundle);
 
 
-
-
-    /*
-                                dialogBuilder = new AlertDialog.Builder(getContext()); //makes a popup when clicked
-                                final View optionsPopup = getLayoutInflater().inflate(R.layout.options_popup, null); // inflates the options layout into a view for the popup
-
-                                Button removeButton = optionsPopup.findViewById(R.id.startSurvey);
-
-                                removeButton.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) { // removes the group from the list and also the firebase
-
-                                        String name = textTest.getText().toString();
-                                        if (gString.contains(name + ",")) {
-                                            int i = gString.indexOf(name + ",");
-                                            gString = gString.substring(0, i) + gString.substring(i + name.length() + 1);
-                                            numGroups--;
-                                            userRef.child("groupString").setValue(gString);
-                                            userRef.child("numGroups").setValue(numGroups);
-                                        }
-
-                                        removeGroup(name);
-                                        dialog.dismiss(); // closes the group options popup
-                                        list.removeAllViews();
-                                        makeGroupList(); //refresh the list
-                                    }
-                                });
-
-                                Button meetupButton = optionsPopup.findViewById(R.id.startMeetupButton);
-                                meetupButton.setOnClickListener(new View.OnClickListener() {
-
-                                    @Override
-                                    public void onClick(View v) { // Starts the meet up for that group (includes a survey and mask check)
-
-                                        dialog.dismiss(); // closes the options popup
-                                        final View meetUpPopup = getLayoutInflater().inflate(R.layout.meetup_popup, null); // inflates the meetup popup into a view
-
-                                        Button maskCheck = meetUpPopup.findViewById(R.id.startMeetupButton);
-                                        maskCheck.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                meetUpGroup = textTest.getText().toString();;
-                                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                                startActivityForResult(intent, 0); // starts the picture taking process, will run onActivityResult when finished
-
-
-
-                                            }
-                                        });
-                                        dialogBuilder.setView(meetUpPopup);
-                                        dialog = dialogBuilder.create();
-                                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                        dialog.show();  // shows the meet up popup
-
-                                    }
-                                });
-
-                                dialogBuilder.setView(optionsPopup);
-                                dialog = dialogBuilder.create();
-                                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                dialog.show(); // shows the group options popup
-
-     */
-
-
-
                             });
-
-
-
-
-
 
                         }
                     }

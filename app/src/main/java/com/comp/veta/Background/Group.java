@@ -1,5 +1,6 @@
 package com.comp.veta.Background;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Group {
@@ -12,6 +13,7 @@ public class Group {
     private String name;
     private int numPeople;
     private String groupID;
+    private ArrayList<Announcement> announcements= new ArrayList<>() ;
 
     public String getGroupID() {
         return groupID;
@@ -33,6 +35,7 @@ public class Group {
         password = pass;
         numPeople = 0;
 
+
     }
 
     public Group(String thename, Boolean hasPass, String pass) {
@@ -41,7 +44,13 @@ public class Group {
         password = pass;
 
     }
+    public ArrayList<Announcement> getAnnouncements() {
+        return announcements;
+    }
 
+    public void setAnnouncements(ArrayList<Announcement> announcements) {
+        this.announcements = announcements;
+    }
     public void setPassword(String password) {
         this.password = password;
     }
