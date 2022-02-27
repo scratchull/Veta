@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/dialog_bg"
+    android:background="@drawable/dialog_bottom_bg"
     android:orientation="vertical"
     android:textAlignment="center">
 
@@ -15,13 +15,13 @@
         android:clickable="true"
         android:scaleX="0.6"
         android:scaleY="0.6"
-        android:tint="@color/white"
+        android:tint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_clear"
-        tools:ignore="SpeakableTextPresentCheck" />
+        app:srcCompat="@drawable/ic_clear" />
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
@@ -40,7 +40,7 @@
                 android:layout_marginTop="16dp"
                 android:text="Group Settings"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -52,7 +52,7 @@
             android:layout_height="39dp"
             android:text="Group Sharing Code:"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -70,7 +70,7 @@
                 android:text="error"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/off_white"
+                android:textColor="@color/darkGray"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -83,7 +83,7 @@
                 android:cropToPadding="false"
                 android:scaleX="0.7"
                 android:scaleY="0.7"
-                android:tint="@color/white"
+                android:tint="@color/black"
                 app:srcCompat="@drawable/ic_baseline_content_copy_24"
                 tools:ignore="SpeakableTextPresentCheck" />
         </LinearLayout>

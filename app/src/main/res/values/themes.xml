@@ -21,6 +21,25 @@
 
     </style>
 
+    <style name="BottomSheetDialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowTitleStyle">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/white</item>
+    </style>
+
+    <style name="BottomDialogAnimation">
+
+        <item name="android:windowEnterAnimation">@anim/slide_in_down</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_down</item>
+
+    </style>
+
+
+
     <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
         <item name="cornerSize">50%</item>
     </style>
@@ -30,7 +49,6 @@
     <style name="VetaDialogTheme" parent="ThemeOverlay.AppCompat.Dialog">
         <item name="colorPrimary">@color/blue_hint</item>
     </style>
-
 
 
     </resources>

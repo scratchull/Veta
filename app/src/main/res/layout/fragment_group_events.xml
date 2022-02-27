@@ -9,44 +9,21 @@
 
 
     <LinearLayout
-        android:id="@+id/fakeEnterAnn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_default"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/makeAnnButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="15dp"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/makeEventButton2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="start|top"
-            android:hint="@string/send_announcment"
-            android:textAlignment="textStart"
-            android:textColorHint="@color/lightGray"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/groupImage" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/fakeEnterAnn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:tint="@color/white"
+            app:srcCompat="@drawable/ic_add" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -56,9 +33,10 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/backToDashButton"
+                android:id="@+id/backToMessagesButton"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:scaleX="0.6"
@@ -90,48 +68,37 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
-                android:layout_weight="1"
+                android:layout_weight="999999999"
                 android:gravity="center|start"
-                android:text="Group"
+                android:text="Group Events"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/openEventButton"
-                android:layout_width="50dp"
+                android:id="@+id/makeEventButton"
+                android:layout_width="55dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="10dp"
+                android:layout_gravity="end"
+                android:layout_weight="1"
                 android:clickable="true"
                 android:focusable="true"
                 android:scaleX="0.6"
                 android:scaleY="0.6"
                 android:tint="@color/white"
-                app:srcCompat="@drawable/ic_baseline_event_24" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/groupSettingsButton"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                android:focusable="true"
-                android:scaleX="0.6"
-                android:scaleY="0.6"
-                android:tint="@color/white"
-                app:srcCompat="@drawable/ic_settings" />
-
+                app:srcCompat="@drawable/ic_add" />
 
 
         </LinearLayout>
 
         <ScrollView
-            android:id="@+id/annScrollView"
+            android:id="@+id/eventScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0">
 
             <LinearLayout
-                android:id="@+id/messages_list"
+                android:id="@+id/event_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
@@ -139,7 +106,6 @@
 
             </LinearLayout>
         </ScrollView>
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,7 +9,7 @@
         android:id="@+id/navigation_dashboard"
         android:name="com.comp.veta.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" >
+        tools:layout="@layout/fragment_dashboard">
 
         <action
             android:id="@+id/action_navigation_dashboard_to_navigation_messages"
@@ -18,10 +18,9 @@
             app:exitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.comp.veta.ui.profile.ProfileFragment"
-        android:label="@string/title_profile"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_events"
+        android:name="com.comp.veta.ui.events.EventsFragment"
+        android:label="@string/title_profile" />
 
     <fragment
         android:id="@+id/navigation_map"
@@ -30,7 +29,7 @@
         tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/navigation_messages"
-        android:name="com.comp.veta.ui.dashboard.MessagesView"
+        android:name="com.comp.veta.ui.dashboard.MessagesFragment"
         android:label="Messages"
         tools:layout="@layout/fragment_messages" >
 
@@ -42,5 +41,23 @@
             app:destination="@id/navigation_dashboard"
             app:enterAnim="@anim/slide_in_left"
             app:exitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_navigation_messages_to_navigation_eventView"
+            app:destination="@id/navigation_groupEventView"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_groupEventView"
+        android:name="com.comp.veta.ui.dashboard.GroupEventFragment"
+        android:label="EventView" >
+        <action
+            android:id="@+id/action_navigation_eventView_to_navigation_messages"
+            app:destination="@id/navigation_messages"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right" />
+        <argument
+            android:name="group_ID"
+            app:argType="string" />
     </fragment>
 </navigation>

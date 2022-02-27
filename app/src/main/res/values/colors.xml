@@ -13,4 +13,10 @@
     <color name= "dark_blue_offset">#131C55</color>
     <color name="colorAccent">#141937</color>
 
+
+    <color name="primary">#9474cc</color>
+    <color name="p_light">#c6a3ff</color>
+    <color name="p_dark">#64489b</color>
+
+
 </resources>

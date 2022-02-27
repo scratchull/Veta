@@ -1,6 +1,7 @@
 package com.comp.veta.ui.profile;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -26,16 +27,17 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends BottomSheetDialogFragment {
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     ImageView userImage;
@@ -97,15 +99,21 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.BottomSheetDialog);
 
 
 
     }
+
+
+
     public View onCreateView(@NonNull LayoutInflater inflater,
+
                              ViewGroup container, Bundle savedInstanceState) {
+        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.BottomSheetDialog);
+        getDialog().getWindow().getAttributes().windowAnimations =  R.style.BottomDialogAnimation;
 
-
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        View root = inflater.inflate(R.layout.sheet_profile, container, false);
 
         TextView displayNameText = root.findViewById(R.id.accountName);
         Button signOutButton = root.findViewById(R.id.SignOutButton);
@@ -197,8 +205,6 @@ public class ProfileFragment extends Fragment {
                   .resize(250, 250)
                   .placeholder(R.drawable.logo)
                   .into(userImage);
-
-
 
         }
 

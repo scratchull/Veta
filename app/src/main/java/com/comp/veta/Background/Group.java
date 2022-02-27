@@ -14,6 +14,7 @@ public class Group {
     private int numPeople;
     private String groupID;
     private ArrayList<Announcement> announcements= new ArrayList<>() ;
+    private ArrayList<Event> events= new ArrayList<>() ;
 
     public String getGroupID() {
         return groupID;
@@ -102,5 +103,11 @@ public class Group {
         this.photoURL = photoURL;
     }
 
+    public ArrayList<Event> getEvents() {
+        return events;
+    }
 
+    public void setEvents(ArrayList<Event> events) {
+        this.events = events;
+    }
 }

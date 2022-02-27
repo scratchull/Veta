@@ -11,19 +11,20 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="55dp"
         android:background="@color/black"
         android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/addAGroupButton"
-            android:layout_width="50dp"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/openProfileButton"
+            android:layout_width="55dp"
             android:layout_height="match_parent"
-            android:clickable="true"
-            android:scaleX="0.7"
-            android:scaleY="0.7"
-            android:tint="@color/white"
-            app:srcCompat="@drawable/ic_add" />
+            android:padding="5dp"
+            app:strokeColor="@color/blue_hint"
+            app:strokeWidth="1dp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            app:srcCompat="@drawable/logo" />
+
 
         <TextView
             android:id="@+id/textView5"
@@ -31,20 +32,20 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center|center_vertical"
-            android:text="Active Groups"
+            android:text="Groups"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/createAGroupButton"
-            android:layout_width="50dp"
+            android:id="@+id/addAGroupButton"
+            android:layout_width="55dp"
             android:layout_height="match_parent"
             android:clickable="true"
-            android:scaleX="0.6"
-            android:scaleY="0.6"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
             android:tint="@color/white"
-            app:srcCompat="@drawable/ic_add_group" />
+            app:srcCompat="@drawable/ic_add" />
 
     </LinearLayout>
 

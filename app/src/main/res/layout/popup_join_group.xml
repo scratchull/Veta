@@ -12,11 +12,11 @@
         android:id="@+id/groupCodeEditText"
         android:layout_width="311dp"
         android:layout_height="48dp"
-        android:layout_marginTop="46dp"
-        android:backgroundTint="@color/white"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/black"
         android:gravity="center_horizontal"
-        android:hint="Unique Group Code"
-        android:inputType="number|text"
+        android:hint="Group Code"
+        android:inputType="text"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +31,7 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/buttons"
         android:text="Join"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/groupCodeEditText"
@@ -45,23 +45,50 @@
         android:layout_marginTop="48dp"
         android:background="@drawable/buttons"
         android:text="Cancel"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/groupCodeEditText" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/makeAGroupButton"
+        android:layout_width="207dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/buttons"
+        android:text="Create A Group"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/joinGroupTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:text="Enter a Group Code"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/joinGroupTitle3" />
+
+    <TextView
+        android:id="@+id/joinGroupTitle3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Or"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/makeAGroupButton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

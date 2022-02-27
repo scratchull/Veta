@@ -11,7 +11,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.VectorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,10 +34,12 @@ import androidx.navigation.Navigation;
 import com.comp.veta.Background.Group;
 import com.comp.veta.Background.User;
 import com.comp.veta.R;
+import com.comp.veta.ui.profile.ProfileFragment;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -71,7 +72,9 @@ public class DashboardFragment extends Fragment {
 
     View root;
     LinearLayout list;
+
     private AlertDialog dialog;
+    private BottomSheetDialog bottomDialog;
 
 
 
@@ -81,6 +84,7 @@ public class DashboardFragment extends Fragment {
     View joinPopup;
 
     ImageView groupImage;
+    ImageView userImage;
 
 
     ActivityResultLauncher<String> mGetPhotoContent;
@@ -95,7 +99,7 @@ public class DashboardFragment extends Fragment {
         }
 
 
-
+        bottomDialog = new BottomSheetDialog(getContext(), R.style.BottomSheetDialog);
         createPopup = getLayoutInflater().inflate(R.layout.popup_create_group, null, false);
         joinPopup = getLayoutInflater().inflate(R.layout.popup_join_group, null, false);
 
@@ -118,14 +122,37 @@ public class DashboardFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
 
+        View profileSettings =  getLayoutInflater().inflate(R.layout.sheet_profile, null, false);
 
         root = inflater.inflate(R.layout.fragment_dashboard, container, false);
         list = root.findViewById(R.id.group_list);
 
+
         makeGroupList();
 
-        AppCompatImageView AddButton = root.findViewById(R.id.createAGroupButton);
-        AddButton.setOnClickListener(v -> makeCreateNewGroupUI());
+
+        userImage = root.findViewById(R.id.openProfileButton);
+
+        if(user!=null) {
+            Picasso.get().load(user.getPhotoUrl())
+                    .centerCrop()
+                    .resize(55, 55)
+                    .placeholder(R.drawable.logo)
+                    .into(userImage);
+
+
+        }
+
+        userImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ProfileFragment profileFragment = new ProfileFragment();
+                profileFragment.show(getActivity().getSupportFragmentManager(),profileFragment.getTag());
+
+
+            }
+        });
 
         AppCompatImageView JoinButton = root.findViewById(R.id.addAGroupButton);
         JoinButton.setOnClickListener(view -> makeJoinNewGroupUI());
@@ -149,7 +176,7 @@ public class DashboardFragment extends Fragment {
 
                         for (int inx = 0; inx < groupArray.size(); inx++) { // goes through each group the user is in
 
-                           View view = getLayoutInflater().inflate(R.layout.group_temp, null);//inflates the group_temp layout into a view
+                           View view = getLayoutInflater().inflate(R.layout.temp_group, null);//inflates the group_temp layout into a view
                             TextView textTest = view.findViewById(R.id.notify_group_name); // Links UI elements to objects
                             TextView sideNote = view.findViewById(R.id.notif_text);
                             ImageView groupPreImage = view.findViewById(R.id.groupPreImage);
@@ -211,6 +238,9 @@ public class DashboardFragment extends Fragment {
         Button closeDialogButton = (Button) joinPopup.findViewById(R.id.cancelJoinGroupButton);
         Button joinGroupButton = (Button) joinPopup.findViewById(R.id.joinButton);
         TextView title = (TextView) joinPopup.findViewById(R.id.joinGroupTitle);
+        Button createButton = joinPopup.findViewById(R.id.makeAGroupButton);
+
+        createButton.setOnClickListener(v -> makeCreateNewGroupUI());
 
         enterCode.setText("");
         enterCode.setHint("Unique Group Code");
@@ -224,6 +254,7 @@ public class DashboardFragment extends Fragment {
         dialog.setCanceledOnTouchOutside(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
+
 
 
 
@@ -304,6 +335,7 @@ public class DashboardFragment extends Fragment {
                            userRef.update("groupIDs", FieldValue.arrayUnion(groupID));
                            DocumentReference groupRef = db.collection("groups").document(groupID);
                            groupRef.update("numPeople", FieldValue.increment(1) );
+                           list.removeAllViews();
                            makeGroupList();
                        }
                        else{
@@ -330,6 +362,7 @@ public class DashboardFragment extends Fragment {
 
     @SuppressLint("ClickableViewAccessibility")
     public void makeCreateNewGroupUI() {
+        dialog.dismiss();
 
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());

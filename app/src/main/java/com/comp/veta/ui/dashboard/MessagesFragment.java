@@ -5,10 +5,10 @@ import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,14 +30,10 @@ import androidx.navigation.Navigation;
 import com.comp.veta.Background.Announcement;
 import com.comp.veta.Background.Group;
 import com.comp.veta.R;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.badge.BadgeUtils;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
@@ -44,7 +41,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 
-public class MessagesView extends Fragment {
+public class MessagesFragment extends Fragment {
+
+
 
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -55,7 +54,9 @@ public class MessagesView extends Fragment {
     View root;
     View makeAnnPopup;
     LinearLayout messageList;
+    ScrollView scrollView;
     private AlertDialog.Builder dialogBuilder ;
+    private BottomSheetDialog bottomDialog;
     private AlertDialog dialog;
 
 
@@ -68,6 +69,7 @@ public class MessagesView extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dialogBuilder = new AlertDialog.Builder(getContext());
+        bottomDialog = new BottomSheetDialog(getContext(), R.style.BottomSheetDialog);
         makeAnnPopup = getLayoutInflater().inflate(R.layout.popup_make_announcement, null, false);
 
         if (user != null) {
@@ -90,10 +92,13 @@ public class MessagesView extends Fragment {
         messageList = root.findViewById(R.id.messages_list);
         ImageView groupImage= root.findViewById(R.id.groupImageMessages);
         TextView groupNameDisplay = root.findViewById(R.id.groupNameMessages);
+        scrollView = root.findViewById(R.id.annScrollView);
 
 
 
-        FloatingActionButton makeAnnButton = root.findViewById((R.id.makeAnnButton));
+
+
+       TextView makeAnnButton = root.findViewById((R.id.makeAnnButton));
 
         makeAnnButton.setOnClickListener(v -> {
 
@@ -106,6 +111,14 @@ public class MessagesView extends Fragment {
         backButton.setOnClickListener(v -> {
 
             Navigation.findNavController(v).navigate(R.id.action_navigation_messages_to_navigation_dashboard);
+        });
+
+        View openEventsButton = root.findViewById(R.id.openEventButton);
+
+        openEventsButton.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("groupID", groupCode);
+            Navigation.findNavController(v).navigate(R.id.action_navigation_messages_to_navigation_eventView,bundle);
         });
 
         AppCompatImageView settingsButton = root.findViewById(R.id.groupSettingsButton);
@@ -151,7 +164,9 @@ public class MessagesView extends Fragment {
         Button createAnnButton = (Button) makeAnnPopup.findViewById(R.id.createAnnButton);
 
 
+
         closeDialogButton.setOnClickListener(v ->{
+            messageText.setText("");
             dialog.dismiss();
         });
 
@@ -162,6 +177,7 @@ public class MessagesView extends Fragment {
                 groupRef.update("announcements", FieldValue.arrayUnion(announcement));
                 messageList.removeAllViews();
                 makeAnnouncementList();
+                messageText.setText("");
                 dialog.dismiss();
 
             }
@@ -174,12 +190,16 @@ public class MessagesView extends Fragment {
         dialog = dialogBuilder.create();
         dialog.setCanceledOnTouchOutside(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
         dialog.show();
 
 
     }
 
     public void makeAnnouncementList(){
+
+
 
         groupRef.get().addOnSuccessListener(documentSnapshot -> {
 
@@ -193,22 +213,26 @@ public class MessagesView extends Fragment {
                     View view = getLayoutInflater().inflate(R.layout.temp_announcement, null);
                     TextView senderText = view.findViewById(R.id.ann_sender); // Links UI elements to objects
                     TextView messageText = view.findViewById(R.id.ann_text);
+                    TextView timeText = view.findViewById(R.id.ann_time);
 
                     senderText.setText(announcements.get(inx).getSender());
                     messageText.setText(announcements.get(inx).getMessage());
-
-
-
-
+                    timeText.setText(DateFormat.format("MM/dd/yyyy (hh:mm aa)",
+                            announcements.get(inx).getTime()));
 
 
                     messageList.addView(view, inx);
 
 
-
-
-
                 }
+                scrollView.post(new Runnable() {
+                    public void run() {
+                        scrollView.setSmoothScrollingEnabled(false);
+                        scrollView.fullScroll(View.FOCUS_DOWN);
+                        scrollView.setSmoothScrollingEnabled(true);
+
+                    }
+                });
 
 
 
@@ -261,7 +285,7 @@ public class MessagesView extends Fragment {
 
     public void makeSettingsDialog(){
 
-        View groupSettings =  getLayoutInflater().inflate(R.layout.popup_group_settings, null, false);
+        View groupSettings =  getLayoutInflater().inflate(R.layout.sheet_group_settings, null, false);
 
         TextView code = groupSettings.findViewById(R.id.groupJoinCodeText);
         code.setText(groupCode);
@@ -281,22 +305,27 @@ public class MessagesView extends Fragment {
         AppCompatImageView closeButton = groupSettings.findViewById(R.id.closeGroupSettingsButton);
 
         closeButton.setOnClickListener(v ->{
-            dialog.dismiss();
+            bottomDialog.dismiss();
         });
 
         AppCompatButton leaveGroupButton = groupSettings.findViewById(R.id.leaveGroupButton);
 
         leaveGroupButton.setOnClickListener(v -> {
             leaveGroup();
-            dialog.dismiss();
+            bottomDialog.dismiss();
         });
 
 
-        dialogBuilder.setView(groupSettings);
-        dialog = dialogBuilder.create();
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
+        bottomDialog.setContentView((groupSettings));
+
+
+        bottomDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        bottomDialog.getWindow().getAttributes().windowAnimations = R.style.BottomDialogAnimation;
+       // bottomDialog.setCanceledOnTouchOutside(false);
+        bottomDialog.show();
+
+
+
 
     }
 

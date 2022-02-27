@@ -12,5 +12,9 @@
     <string name="PLACES_API_KEY">AIzaSyBkVhZrjxQa14PfrRiDwuPoyVPHmtAwQnA</string>
     <string name="GEO_API_KEY">AIzaSyDL_brA-eSzUGOJbjaodR-y9qQK-s4gFV8</string>
     <string name="GROUP_ID">groupID</string>
+    <string name="send_announcment">Send Announcment...</string>
+    <string name="search">Search</string>
+    <string name="events">Events</string>
+
 
 </resources>
