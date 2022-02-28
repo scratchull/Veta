@@ -1,30 +1,33 @@
 package com.comp.veta.Background;
 
+import com.google.type.DateTime;
+
 import java.util.Date;
 
-public class Event {
+public class Event implements Comparable<Event>{
 
     private String eventName;
     private String eventDescription;
     private String eventStringLocation;
     private String eventCreator;
-    private long LONGITUDE;
-    private long LATITUDE;
-    private long eventTime;
+    private double LONGITUDE;
+    private double LATITUDE;
+    private Date eventTime;
 
 
-    public Event(String m, String s, long t){
-        eventName = m;
-        eventDescription = s;
-        eventTime = t;
+
+
+    public Event(String eventName, String eventDescription, String eventStringLocation, String eventCreator, double LONGITUDE, double LATITUDE, Date eventTime) {
+        this.eventName = eventName;
+        this.eventDescription = eventDescription;
+        this.eventStringLocation = eventStringLocation;
+        this.eventCreator = eventCreator;
+        this.LONGITUDE = LONGITUDE;
+        this.LATITUDE = LATITUDE;
+        this.eventTime = eventTime;
+
+
     }
-
-    public Event(String m, String s){
-        eventName = m;
-        eventDescription = s;
-        eventTime  = new Date().getTime();;
-    }
-
 
     public String getEventName() {
         return eventName;
@@ -58,27 +61,27 @@ public class Event {
         this.eventCreator = eventCreator;
     }
 
-    public long getLONGITUDE() {
+    public double getLONGITUDE() {
         return LONGITUDE;
     }
 
-    public void setLONGITUDE(long LONGITUDE) {
+    public void setLONGITUDE(double LONGITUDE) {
         this.LONGITUDE = LONGITUDE;
     }
 
-    public long getLATITUDE() {
+    public double getLATITUDE() {
         return LATITUDE;
     }
 
-    public void setLATITUDE(long LATITUDE) {
+    public void setLATITUDE(double LATITUDE) {
         this.LATITUDE = LATITUDE;
     }
 
-    public long getEventTime() {
+    public Date getEventTime() {
         return eventTime;
     }
 
-    public void setEventTime(long eventTime) {
+    public void setEventTime(Date eventTime) {
         this.eventTime = eventTime;
     }
 
@@ -87,6 +90,8 @@ public class Event {
     }
 
 
-
-
+    @Override
+    public int compareTo(Event event) {
+        return getEventTime().compareTo(event.getEventTime());
+    }
 }

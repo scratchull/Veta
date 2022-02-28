@@ -27,14 +27,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="24dp"
         android:text="Event Name"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/joinGroupTitle4" />
 
     <TextView
         android:id="@+id/eventCancelCreateButton"
@@ -52,20 +52,19 @@
 
     <EditText
         android:id="@+id/eventDescriptionEditText"
-        android:layout_width="0dp"
-        android:layout_height="111dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="93dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="88dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/bg_edit_text"
         android:cursorVisible="true"
         android:gravity="top|start"
         android:hint="Tell everyone what this event is about."
         android:inputType="textMultiLine"
-        android:lines="20"
-        android:maxLines="25"
-        android:minLines="8"
+        android:lines="8"
+        android:maxLines="10"
+        android:minLines="4"
         android:paddingLeft="10dp"
         android:paddingTop="5dp"
         android:scrollbars="vertical"
@@ -73,40 +72,38 @@
         android:textColor="@color/black"
         android:textCursorDrawable="@color/black"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/joinGroupTitle9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/eventNameEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/joinGroupTitle6" />
 
     <TextView
         android:id="@+id/joinGroupTitle6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="7dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:text="Description"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/eventDescriptionEditText"
-        app:layout_constraintStart_toStartOf="@+id/eventDescriptionEditText" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventNameEditText" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/eventSetLocation"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="22dp"
-        android:layout_marginEnd="13dp"
-        android:layout_marginBottom="21dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/bg_edit_text"
         android:gravity="center|left"
         android:paddingLeft="10dp"
         android:text="Set Location"
         android:textAlignment="textStart"
-        android:textColor="@color/darkGray"
+        android:textColor="@color/blue_hint"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/joinGroupTitle9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eventDescriptionEditText" />
@@ -115,65 +112,63 @@
         android:id="@+id/joinGroupTitle8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:text="Date"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/eventEnterDate"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventSetLocation" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/eventEnterDate"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginEnd="18dp"
+        android:layout_width="177dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/buttons"
         android:text="Enter Date"
         android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/eventEnterTime"
-        app:layout_constraintEnd_toStartOf="@+id/eventEnterTime"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/eventEnterTime" />
+        app:layout_constraintTop_toBottomOf="@+id/joinGroupTitle8" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/eventEnterTime"
         android:layout_width="177dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="33dp"
-        android:layout_marginEnd="21dp"
-        android:layout_marginBottom="21dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/buttons"
         android:text="Enter Time"
         android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/eventCreateButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/joinGroupTitle9" />
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/eventEnterDate"
+        app:layout_constraintTop_toBottomOf="@+id/joinGroupTitle9" />
 
     <TextView
         android:id="@+id/joinGroupTitle9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="67dp"
+        android:layout_marginStart="155dp"
+        android:layout_marginTop="16dp"
         android:text="Time"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/eventCreateButton"
-        app:layout_constraintStart_toStartOf="@+id/eventEnterTime" />
+        app:layout_constraintStart_toEndOf="@+id/joinGroupTitle8"
+        app:layout_constraintTop_toBottomOf="@+id/eventSetLocation" />
 
     <EditText
         android:id="@+id/eventNameEditText"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="18dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/bg_edit_text"
         android:cursorVisible="true"
         android:gravity="top|start"
@@ -181,6 +176,7 @@
         android:inputType="textMultiLine"
         android:lines="1"
         android:maxLines="1"
+        android:minHeight="48dp"
         android:minLines="1"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
@@ -196,18 +192,25 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/eventCreateButton"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="51dp"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="64dp"
         android:background="@drawable/buttons"
         android:text="Create"
         android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/joinGroupTitle8" />
+        app:layout_constraintTop_toBottomOf="@+id/eventEnterDate" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toBottomOf="@+id/eventCreateButton"
+        tools:layout_editor_absoluteX="201dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
