@@ -89,6 +89,10 @@ public class DashboardFragment extends Fragment {
 
     ActivityResultLauncher<String> mGetPhotoContent;
 
+    /**
+     * Run on the fragment creation
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +122,13 @@ public class DashboardFragment extends Fragment {
     }
 
 
+    /**
+     * Runs after onCreate, which sets up the view
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -162,6 +173,9 @@ public class DashboardFragment extends Fragment {
     }
 
 
+    /**
+     * Makes a list of views which represent each group the user is in
+     */
     public void makeGroupList() {
 
         if(user!= null) {
@@ -181,7 +195,8 @@ public class DashboardFragment extends Fragment {
                             TextView sideNote = view.findViewById(R.id.notif_text);
                             ImageView groupPreImage = view.findViewById(R.id.groupPreImage);
 
-                            view.setTag(R.string.GROUP_ID,groupArray.get(inx));
+                            int tempPos = inx;
+
 
                             DocumentReference tempGroupRef = db.collection("groups").document(groupArray.get(inx));
                             tempGroupRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -198,24 +213,29 @@ public class DashboardFragment extends Fragment {
                                         textTest.setText(tempGroup.getName());
                                         sideNote.setText(tempGroup.getNumPeople() + " People");
 
+                                        view.setTag(R.string.GROUP_ID,groupArray.get(tempPos));
+                                        // adds an on click listener for each group view in the list
+                                        view.setOnClickListener(v -> {
+                                            String gID = (String) v.getTag(R.string.GROUP_ID);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("groupID", gID);
+                                            Navigation.findNavController(v).navigate(R.id.action_navigation_dashboard_to_navigation_messages, bundle);
+
+
+                                        });
+                                        list.addView(view, tempPos);
+
+
+                                    }
+                                    else{
+                                        userRef.update("groupIDs", FieldValue.arrayRemove(groupArray.get(tempPos)));
 
                                     }
 
                                 }
                             });
 
-                            list.addView(view, inx);
 
-
-                            // adds an on click listener for each group view in the list
-                            view.setOnClickListener(v -> {
-                                String gID = (String) v.getTag(R.string.GROUP_ID);
-                                Bundle bundle = new Bundle();
-                                bundle.putString("groupID", gID);
-                                Navigation.findNavController(v).navigate(R.id.action_navigation_dashboard_to_navigation_messages, bundle);
-
-
-                            });
 
                         }
                     }
@@ -228,9 +248,9 @@ public class DashboardFragment extends Fragment {
     }
 
 
-
-
-
+    /**
+     * Makes the UI pop-up which allows the user to join or create a group
+     */
     AtomicBoolean onPasswordCheck = new AtomicBoolean(false);
     public void makeJoinNewGroupUI(){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
@@ -322,8 +342,11 @@ public class DashboardFragment extends Fragment {
 
     }
 
+    /**
+     * Joins a group with the given groupID
+     * @param groupID
+     */
     public void joinGroup(String groupID){
-
 
         userRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -359,7 +382,9 @@ public class DashboardFragment extends Fragment {
     }
 
 
-
+    /**
+     * Makes the UI that allows the user to create a new group
+     */
     @SuppressLint("ClickableViewAccessibility")
     public void makeCreateNewGroupUI() {
         dialog.dismiss();
@@ -371,6 +396,7 @@ public class DashboardFragment extends Fragment {
         Button closeDialog = (Button) createPopup.findViewById(R.id.cancelCreateGroupButton);
         Button createGroup = (Button) createPopup.findViewById(R.id.createGroupButton);
         SwitchCompat passwordSwitch = createPopup.findViewById(R.id.passwordSwitch);
+        SwitchCompat editAccessSwitch = createPopup.findViewById(R.id.allAccessSwitch);
 
         groupImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_add));
 
@@ -424,7 +450,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                createNewGroup(enterName.getText().toString(),enterPassword.getText().toString(),passwordSwitch.isChecked() );
+                createNewGroup(enterName.getText().toString(),enterPassword.getText().toString(),passwordSwitch.isChecked(), editAccessSwitch.isChecked() );
 
             }
 
@@ -433,7 +459,15 @@ public class DashboardFragment extends Fragment {
 
     }
 
-    public void createNewGroup(String gName, String gPassword, Boolean gHasPassword){
+    /**
+     *Takes a bunch of parameters with are needed to set up a group with those setting
+     * This is the method that actually construct and stores the group in the Firebase database
+     * @param gName
+     * @param gPassword
+     * @param gHasPassword
+     * @param gAllAccess
+     */
+    public void createNewGroup(String gName, String gPassword, Boolean gHasPassword, Boolean gAllAccess){
         String name = gName;
         String password = gPassword;
         Boolean hasPassword = gHasPassword;
@@ -445,7 +479,7 @@ public class DashboardFragment extends Fragment {
             progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
             progress.show();
 
-            Group group = new Group(name, hasPassword, password);
+            Group group = new Group(name, hasPassword, password, gAllAccess, user.getUid());
             group.addPerson();
 
             String strID = getRandomNumberString();
@@ -511,6 +545,10 @@ public class DashboardFragment extends Fragment {
     }
 
 
+    /**
+     * This is just a method that gets a random 8 integer number to act as the ID for that group
+     * It also checks to make sure that ID doesn't already exist
+     */
     boolean docExists = true;
     public static String getRandomNumberString() {
 
@@ -546,47 +584,6 @@ public class DashboardFragment extends Fragment {
         return randID;
 
     }
-
-
-
-    public void removeGroup(String groupID) {
-        DocumentReference groupRef = db.collection("groups").document(groupID);
-        groupRef.update("userIDs", FieldValue.arrayRemove(user.getUid()));
-        groupRef.update("numPeople", FieldValue.increment(-1));
-
-        groupRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Group tempGroup = documentSnapshot.toObject(Group.class);
-
-                if (tempGroup!= null)
-                if (tempGroup.getNumPeople()<=0){
-                    groupRef.delete();
-                }
-
-
-            }
-        });
-
-        //Remove from user
-        userRef.update("groupIDs", FieldValue.arrayRemove(groupID));
-        list.removeAllViews();
-        makeGroupList();
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
-
 
 
 

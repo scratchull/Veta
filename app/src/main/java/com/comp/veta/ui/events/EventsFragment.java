@@ -40,7 +40,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
-
+/**
+ * This fragment manages all of the events tab at the bottom of the screen
+ */
 public class EventsFragment extends Fragment {
 
 
@@ -60,7 +62,11 @@ public class EventsFragment extends Fragment {
 
 
 
-
+    /**
+     * This is the first thing that runs when this fragment is initialized
+     * It sets up some variables like the user
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +85,14 @@ public class EventsFragment extends Fragment {
 
     }
 
+    /**
+     * Runs after the onCreate to inflate the view on the screen
+     *  This sets up all the on screen UI components
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -98,6 +112,11 @@ public class EventsFragment extends Fragment {
         return root;
     }
 
+
+    /**
+     * This is much like all the other methods used to generate a list on screen
+     * This time it will get all the events from every group the user is in and display them all in the list
+     */
     public void makeEventsList() {
         ArrayList<Event> events = new ArrayList();
 
@@ -124,6 +143,9 @@ public class EventsFragment extends Fragment {
                                 TextView nameText = view.findViewById(R.id.event_name); // Links UI elements to objects
                                 TextView locationText = view.findViewById(R.id.event_location);
                                 TextView timeText = view.findViewById(R.id.event_time);
+
+                                TextView deleteEvent = view.findViewById(R.id.removeAnEvent);
+                                deleteEvent.setVisibility(View.INVISIBLE);
 
                                 nameText.setText(events.get(inx).getEventName());
                                 locationText.setText(events.get(inx).getEventStringLocation());

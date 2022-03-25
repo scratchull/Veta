@@ -39,6 +39,7 @@ import com.comp.veta.Background.Group;
 import com.comp.veta.R;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -53,6 +54,7 @@ import com.google.android.material.timepicker.TimeFormat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.type.DateTime;
@@ -71,6 +73,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+/**
+ * This fragment/class manages the Group Events screen
+ * It allows for the creation of events and also displays all the events in a nice list
+ */
 
 public class GroupEventFragment extends Fragment
         implements DatePickerDialog.OnDateSetListener {
@@ -97,6 +103,8 @@ public class GroupEventFragment extends Fragment
     private String date;
     private String time;
 
+    private Boolean userCanMakeEvents = false;
+
     Button eventSetLocationButton;
     Button eventSetDateButton;
 
@@ -105,6 +113,11 @@ public class GroupEventFragment extends Fragment
     SimpleDateFormat _12HourSDF = new SimpleDateFormat("hh:mm a");
 
 
+    /**
+     * This is the first thing that runs when this fragment is initialized
+     * It sets up some variables like the user and group that was passed in by the messages fragment
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,10 +132,32 @@ public class GroupEventFragment extends Fragment
         if (getArguments() != null)
             groupRef = db.collection("groups").document(getArguments().getString("groupID"));
 
+        if (groupRef != null) {
+            groupRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    Group tempGroup = documentSnapshot.toObject(Group.class);
+
+                    if (tempGroup.isAllowAllAccess() || tempGroup.getCreatorID().equals(user.getUid())) {
+                        userCanMakeEvents = true;
+                    }
+
+
+                }
+            });
+        }
 
     }
 
 
+    /**
+     * Runs after the onCreate to inflate the view on the screen
+     * This sets up all the on screen UI components
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -135,7 +170,16 @@ public class GroupEventFragment extends Fragment
         View makeEventButton = root.findViewById(R.id.makeEventButton);
 
         makeEventButton.setOnClickListener(v -> {
-            makeEventUI();
+            if(userCanMakeEvents) {
+                makeEventUI();
+            }
+            else{
+                Toast t =  Toast.makeText(getActivity(),"You do not have access to make an Event",Toast.LENGTH_LONG);
+                t.setGravity(Gravity.TOP,0,0);
+                t.show();
+
+            }
+
 
         });
 
@@ -171,6 +215,10 @@ public class GroupEventFragment extends Fragment
     }
 
 
+    /**
+     * This method takes all the events within a group and adds them all to a list
+     * Each item in the list (a single event) has it's own set of UI components
+     */
     public void makeGroupEventsList() {
 
 
@@ -184,16 +232,34 @@ public class GroupEventFragment extends Fragment
 
                 for (int inx = 0; inx < events.size(); inx++) {
 
+                    Event event = events.get(inx);
+
                     View view = getLayoutInflater().inflate(R.layout.temp_event, null);
                     TextView nameText = view.findViewById(R.id.event_name); // Links UI elements to objects
                     TextView locationText = view.findViewById(R.id.event_location);
                     TextView timeText = view.findViewById(R.id.event_time);
 
-                    nameText.setText(events.get(inx).getEventName());
-                    locationText.setText(events.get(inx).getEventStringLocation());
+                    TextView deleteEvent = view.findViewById(R.id.removeAnEvent);
+                    if (group.getCreatorID().equals(user.getUid()) || event.getEventCreator().equals(user.getUid())){
+                        deleteEvent.setVisibility(View.VISIBLE);
+                        deleteEvent.setOnClickListener(v -> {
+                            eventList.removeView(view);
+                            groupRef.update("events", FieldValue.arrayRemove(event));
+                            Toast t = Toast.makeText(getActivity(), "The event " +event.getEventName()+" was removed", Toast.LENGTH_LONG);
+                            t.setGravity(Gravity.TOP, 0, 0);
+                            t.show();
 
-                    Date dt = events.get(inx).getEventTime();
-                    SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yy hh:mm a");
+                        });
+                    }
+                    else
+                        deleteEvent.setVisibility(View.INVISIBLE);
+
+
+                    nameText.setText(event.getEventName());
+                    locationText.setText(event.getEventStringLocation());
+
+                    Date dt = event.getEventTime();
+                    SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yy 'at' hh:mm a");
                     timeText.setText(dateFormatter.format(dt));
 
 
@@ -201,17 +267,7 @@ public class GroupEventFragment extends Fragment
 
 
                 }
-                /*
-                scrollView.post(new Runnable() {
-                    public void run() {
-                        scrollView.setSmoothScrollingEnabled(false);
-                        scrollView.fullScroll(View.FOCUS_DOWN);
-                        scrollView.setSmoothScrollingEnabled(true);
 
-                    }
-                });
-
-                 */
 
 
             }
@@ -222,6 +278,9 @@ public class GroupEventFragment extends Fragment
     }
 
 
+    /**
+     * This method create the bottom pop-up that allows for the creation of an event
+     */
     public void makeEventUI() {
 
         View eventCreation = getLayoutInflater().inflate(R.layout.sheet_make_event, null, false);
@@ -302,7 +361,7 @@ public class GroupEventFragment extends Fragment
                         //  SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yy");
                         //DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm a");
 
-                        Event event = new Event(eventName, eventDes, addressName, user.getDisplayName(), latLng.longitude, latLng.latitude, dateTime);
+                        Event event = new Event(eventName, eventDes, addressName, user.getUid(), latLng.longitude, latLng.latitude, dateTime);
                         groupRef.update("events", FieldValue.arrayUnion(event));
                         groupRef.get().addOnSuccessListener(documentSnapshot -> {
 
@@ -347,6 +406,11 @@ public class GroupEventFragment extends Fragment
 
     }
 
+
+    /**
+     * This is an Activity that waits for a result, and when that result is gotten it will run this code with that information
+     * Basically, this waits for a location to be picked by the user from the Google Places API, and then the API gives that information so it can be stored in the event
+     */
     ActivityResultLauncher<Intent> locationSearchActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -379,6 +443,13 @@ public class GroupEventFragment extends Fragment
             });
 
 
+    /**
+     * This will show a confirmation to the user when they put in a correct time while creating an event
+     * @param datePicker
+     * @param year
+     * @param month
+     * @param day
+     */
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
         date = (month + 1) + "/" + day + "/" + year;

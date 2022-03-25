@@ -184,16 +184,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapboxM
 
                             SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yy hh:mm a");
 
+                            if(events.get(0)!=null)
                             place1 = CarmenFeature.builder().text(events.get(0).getEventName()+" "+dateFormatter.format(events.get(0).getEventTime()))
                                     .geometry(Point.fromLngLat(events.get(0).getLONGITUDE(), events.get(0).getLATITUDE()))
                                     .placeName(events.get(0).getEventStringLocation())
                                     .properties(new JsonObject())
                                     .build();
+                            if(events.get(1)!=null)
                             place2 =  CarmenFeature.builder().text(events.get(1).getEventName()+" "+dateFormatter.format(events.get(1).getEventTime()))
                                     .geometry(Point.fromLngLat(events.get(1).getLONGITUDE(), events.get(1).getLATITUDE()))
                                     .placeName(events.get(1).getEventStringLocation())
                                     .properties(new JsonObject())
                                     .build();
+                            if(events.get(2)!=null)
                             place3 =  CarmenFeature.builder().text(events.get(2).getEventName()+" "+dateFormatter.format(events.get(2).getEventTime()))
                                     .geometry(Point.fromLngLat(events.get(2).getLONGITUDE(), events.get(2).getLATITUDE()))
                                     .placeName(events.get(2).getEventStringLocation())

@@ -8,6 +8,7 @@ public class Announcement {
     private String sender;
     private long time;
 
+
     public Announcement(String m, String s, long t){
         message = m;
         sender = s;

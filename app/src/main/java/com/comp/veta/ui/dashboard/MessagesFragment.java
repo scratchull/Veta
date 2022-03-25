@@ -30,17 +30,22 @@ import androidx.navigation.Navigation;
 import com.comp.veta.Background.Announcement;
 import com.comp.veta.Background.Group;
 import com.comp.veta.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-
+/**
+ * This fragment/class manages all of the components to the message/announcement screen
+ *
+ */
 public class MessagesFragment extends Fragment {
 
 
@@ -60,11 +65,16 @@ public class MessagesFragment extends Fragment {
     private AlertDialog dialog;
 
 
+
     private String groupCode;
 
 
 
-
+    /**
+     * This is the first thing that runs when this fragment is initialized
+     * It sets up some variables like the user and group that was passed in by the dashboard fragment
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,8 +93,18 @@ public class MessagesFragment extends Fragment {
 
 
 
+
+
     }
 
+    /**
+     * Runs after the onCreate to inflate the view on the screen
+     *  This sets up all the on screen UI components
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -116,9 +136,12 @@ public class MessagesFragment extends Fragment {
         View openEventsButton = root.findViewById(R.id.openEventButton);
 
         openEventsButton.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putString("groupID", groupCode);
-            Navigation.findNavController(v).navigate(R.id.action_navigation_messages_to_navigation_eventView,bundle);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("groupID", groupCode);
+                Navigation.findNavController(v).navigate(R.id.action_navigation_messages_to_navigation_eventView, bundle);
+
+
         });
 
         AppCompatImageView settingsButton = root.findViewById(R.id.groupSettingsButton);
@@ -158,16 +181,20 @@ public class MessagesFragment extends Fragment {
 
         return root;
     }
+
+    /**
+     * Inflates the UI responsible for creating a new announcement
+     */
     public void makeAnnUI(){
         EditText messageText = (EditText) makeAnnPopup.findViewById(R.id.annEditText);
-        Button closeDialogButton = (Button) makeAnnPopup.findViewById(R.id.cancelMakeAnnButton);
+        TextView closeDialogButton =  makeAnnPopup.findViewById(R.id.cancelMakeAnnButton);
         Button createAnnButton = (Button) makeAnnPopup.findViewById(R.id.createAnnButton);
 
 
 
         closeDialogButton.setOnClickListener(v ->{
             messageText.setText("");
-            dialog.dismiss();
+            bottomDialog.dismiss();
         });
 
         createAnnButton.setOnClickListener(v ->{
@@ -178,7 +205,7 @@ public class MessagesFragment extends Fragment {
                 messageList.removeAllViews();
                 makeAnnouncementList();
                 messageText.setText("");
-                dialog.dismiss();
+                bottomDialog.dismiss();
 
             }
         });
@@ -186,17 +213,19 @@ public class MessagesFragment extends Fragment {
         if (makeAnnPopup.getParent() != null) {
             ((ViewGroup) makeAnnPopup.getParent()).removeView(makeAnnPopup);
         }
-        dialogBuilder.setView(makeAnnPopup);
-        dialog = dialogBuilder.create();
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+        bottomDialog.setContentView((makeAnnPopup));
+        bottomDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        bottomDialog.getWindow().getAttributes().windowAnimations = R.style.BottomDialogAnimation;
+        bottomDialog.show();
 
-        dialog.show();
 
 
     }
 
+    /**
+     * Functions a lot like the makeEventsList where it takes all the announcements in a group and puts them in a list
+     */
     public void makeAnnouncementList(){
 
 
@@ -247,6 +276,11 @@ public class MessagesFragment extends Fragment {
     }
 
 
+    /**
+     * A method that will make the user leave the group they are currently viewing
+     * This is called through the settings of a certain group
+     * If there are no people left in the group, the group is deleted
+     */
     public void leaveGroup(){
 
         ProgressDialog progress = new ProgressDialog(getActivity());
@@ -262,16 +296,16 @@ public class MessagesFragment extends Fragment {
             if (group != null) {
                 userRef.update("groupIDs", FieldValue.arrayRemove(group.getGroupID()));
 
-                if(group.getNumPeople()==1){
+                if(group.getNumPeople()<=1){
                     groupRef.delete();
                 }
                 else {
                     groupRef.update("numPeople", FieldValue.increment(-1));
+
                 }
-
-
-
-
+                Toast t =  Toast.makeText(getActivity(),"You left "+ group.getName(),Toast.LENGTH_LONG);
+                t.setGravity(Gravity.TOP,0,0);
+                t.show();
 
 
                 Navigation.findNavController(root).navigate(R.id.action_navigation_messages_to_navigation_dashboard);
@@ -283,6 +317,12 @@ public class MessagesFragment extends Fragment {
 
     }
 
+    /**
+     * Inflates the UI responsible for the settings of a group
+     * This includes the share code and ways to leave the group
+     * If you are the owner of the group, you have the ability to delete the group entirely
+     *
+     */
     public void makeSettingsDialog(){
 
         View groupSettings =  getLayoutInflater().inflate(R.layout.sheet_group_settings, null, false);
@@ -315,6 +355,10 @@ public class MessagesFragment extends Fragment {
             bottomDialog.dismiss();
         });
 
+         AppCompatButton deleteGroupButton = groupSettings.findViewById(R.id.deleteGroupButton);
+
+        deleteGroupButton.setOnClickListener(v -> deleteGroup());
+
 
         bottomDialog.setContentView((groupSettings));
 
@@ -327,6 +371,46 @@ public class MessagesFragment extends Fragment {
 
 
 
+    }
+
+
+    /**
+     * Can only be run if the owner of the group chooses to delete the group
+     */
+    public void deleteGroup(){
+
+
+        groupRef.get().addOnSuccessListener(documentSnapshot -> {
+
+            Group group = documentSnapshot.toObject(Group.class);
+
+            if (group != null) {
+                if(group.getCreatorID().equals(user.getUid())){
+                    ProgressDialog progress = new ProgressDialog(getActivity());
+                    progress.setTitle("Loading");
+                    progress.setMessage("Deleting this group forever");
+                    progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+                    progress.show();
+                    groupRef.delete();
+                    Navigation.findNavController(root).navigate(R.id.action_navigation_messages_to_navigation_dashboard);
+                    Toast t =  Toast.makeText(getActivity(),"The group has been deleted",Toast.LENGTH_LONG);
+                    t.setGravity(Gravity.TOP,0,0);
+                    t.show();
+                    progress.dismiss();
+
+
+                }
+
+                else{
+                    Toast t =  Toast.makeText(getActivity(),"You must be the owner of the group to delete it",Toast.LENGTH_LONG);
+                    t.setGravity(Gravity.TOP,0,0);
+                    t.show();
+                }
+
+
+            }
+
+        });
     }
 
 

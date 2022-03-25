@@ -50,6 +50,8 @@
             android:id="@+id/joinGroupTitle2"
             android:layout_width="wrap_content"
             android:layout_height="39dp"
+            android:layout_gravity="left"
+            android:layout_marginLeft="10dp"
             android:text="Group Sharing Code:"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/black"
@@ -58,15 +60,19 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="91dp"
-            android:gravity="center_horizontal|top|center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:background="@drawable/group_border"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp">
 
             <TextView
                 android:id="@+id/groupJoinCodeText"
                 android:layout_width="171dp"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="15dp"
+                android:gravity="center"
                 android:text="error"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -74,10 +80,17 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/copyCodeText"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="10dp"
                 android:adjustViewBounds="false"
                 android:clickable="true"
                 android:cropToPadding="false"
@@ -93,10 +106,23 @@
             android:layout_width="301dp"
             android:layout_height="50dp"
             android:layout_marginTop="30dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/buttons"
+            android:backgroundTint="@color/fancy_red"
+            android:text="Leave Group"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/deleteGroupButton"
+            android:layout_width="216dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/buttons"
-            android:text="Leave Group"
-            android:textColor="@color/fancy_red"
+            android:backgroundTint="@color/darkGray"
+            android:text="Delete Group"
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
     </LinearLayout>

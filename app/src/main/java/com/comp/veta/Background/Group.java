@@ -15,6 +15,8 @@ public class Group {
     private String groupID;
     private ArrayList<Announcement> announcements= new ArrayList<>() ;
     private ArrayList<Event> events= new ArrayList<>() ;
+    private String creatorID;
+    private boolean allowAllAccess;
 
     public String getGroupID() {
         return groupID;
@@ -39,10 +41,12 @@ public class Group {
 
     }
 
-    public Group(String thename, Boolean hasPass, String pass) {
+    public Group(String thename, Boolean hasPass, String pass, Boolean access, String id) {
         name = thename;
         hasPassword = hasPass;
         password = pass;
+        creatorID = id;
+        allowAllAccess = access;
 
     }
     public ArrayList<Announcement> getAnnouncements() {
@@ -76,6 +80,13 @@ public class Group {
         return numPeople;
     }
 
+    public boolean isAllowAllAccess() {
+        return allowAllAccess;
+    }
+
+    public void setAllowAllAccess(boolean allowAllAccess) {
+        this.allowAllAccess = allowAllAccess;
+    }
 
     public void addPerson() {
       //  userIDs.add(ID);
@@ -85,6 +96,14 @@ public class Group {
     public void removePerson() {
       //  userIDs.remove(ID);
         numPeople--;
+    }
+
+    public String getCreatorID() {
+        return creatorID;
+    }
+
+    public void setCreatorID(String creatorID) {
+        this.creatorID = creatorID;
     }
 
     public boolean isHasPassword() {
@@ -111,3 +130,5 @@ public class Group {
         this.events = events;
     }
 }
+
+

@@ -37,7 +37,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Arrays;
 import java.util.List;
 
-
+/**
+ * This main activity is the first class that runs in the program
+ * It will get the user signed in if they are not, and if they are then it will sign them in from their last session
+ * This also sets up the fragment based UI system, where there are tabs on a bottom bar which the user navigates through
+ */
 public class MainActivity extends AppCompatActivity {
 
 
@@ -56,7 +60,11 @@ public class MainActivity extends AppCompatActivity {
     );
 
 
-
+    /**
+     * Makes sure everything is initialized if not already
+     * Sets up the navigation controller for the bottom bar
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,6 +149,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This bit runs when the user is able to sign in correctly
+     * @param result
+     */
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {

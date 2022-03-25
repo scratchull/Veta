@@ -37,6 +37,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+/**
+ * This is the profile page as a bottom screen pop-up
+ * It is set up differently than the rest of the bottom pop-ups because the is more functionality
+ */
 public class ProfileFragment extends BottomSheetDialogFragment {
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -44,6 +48,9 @@ public class ProfileFragment extends BottomSheetDialogFragment {
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
 
+    /**
+     * This code runs when a result is gotten from the device when picking a photo
+     */
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
             new ActivityResultCallback<Uri>() {
                 @Override
@@ -96,6 +103,10 @@ public class ProfileFragment extends BottomSheetDialogFragment {
             });
 
 
+    /**
+     * This is the first thing that runs when this fragment is initialized
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +117,14 @@ public class ProfileFragment extends BottomSheetDialogFragment {
     }
 
 
-
+    /**
+     * Runs after the onCreate to inflate the view on the screen
+     *  This sets up all the on screen UI components
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
 
                              ViewGroup container, Bundle savedInstanceState) {

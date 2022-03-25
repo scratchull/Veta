@@ -17,6 +17,7 @@
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="colorPrimary">#009688</color>
+    <color name="event_bg">#348698EA</color>
 
 
     <color name="primary">#9474cc</color>

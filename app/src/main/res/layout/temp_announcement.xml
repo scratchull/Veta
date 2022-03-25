@@ -44,7 +44,7 @@
             android:paddingLeft="10dp"
             android:text="Sample Text"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="20sp" />
+            android:textSize="24sp" />
     </RelativeLayout>
 
 

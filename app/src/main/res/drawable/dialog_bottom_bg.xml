@@ -5,7 +5,7 @@
 
     <shape xmlns:android="http://schemas.android.com/apk/res/android"
         android:shape="rectangle">
-        <solid android:color="@color/off_white"/>
+        <solid android:color="@color/white"/>
         <corners android:topLeftRadius="20dp"
             android:topRightRadius="20dp"/>
         <stroke android:color="@color/black"
@@ -16,10 +16,18 @@
 
 </item>
 <item
-    android:top="55dp">
+    android:right = "-10dp"
+    android:left = "-10dp"
+    android:bottom = "-10dp"
+    android:top="55dp"
+
+    >
     <shape android:shape="rectangle">
         <solid android:color="@color/white"/>
+        <stroke android:color="@color/lightGray"
+            android:width="2dp"/>
     </shape>
+
 </item>
 
 

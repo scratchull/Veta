@@ -9,7 +9,7 @@ public class Event implements Comparable<Event>{
     private String eventName;
     private String eventDescription;
     private String eventStringLocation;
-    private String eventCreator;
+    private String creatorID;
     private double LONGITUDE;
     private double LATITUDE;
     private Date eventTime;
@@ -21,7 +21,7 @@ public class Event implements Comparable<Event>{
         this.eventName = eventName;
         this.eventDescription = eventDescription;
         this.eventStringLocation = eventStringLocation;
-        this.eventCreator = eventCreator;
+        this.creatorID = eventCreator;
         this.LONGITUDE = LONGITUDE;
         this.LATITUDE = LATITUDE;
         this.eventTime = eventTime;
@@ -54,11 +54,11 @@ public class Event implements Comparable<Event>{
     }
 
     public String getEventCreator() {
-        return eventCreator;
+        return creatorID;
     }
 
     public void setEventCreator(String eventCreator) {
-        this.eventCreator = eventCreator;
+        this.creatorID = eventCreator;
     }
 
     public double getLONGITUDE() {

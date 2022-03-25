@@ -44,13 +44,14 @@
         android:id="@+id/groupPassword"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         android:backgroundTint="@color/black"
         android:gravity="center_horizontal"
         android:hint="Password"
         android:inputType="textPassword"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordSwitch" />
 
@@ -85,9 +86,9 @@
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/passwordSwitch"
-        android:layout_width="216dp"
+        android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="4dp"
         android:switchPadding="100dp"
         android:switchTextAppearance="@style/TextAppearance.AppCompat.Medium"
         android:text="Require Password"
@@ -95,10 +96,23 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/allAccessSwitch" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/allAccessSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:switchPadding="100dp"
+        android:switchTextAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="Let Anyone Make Events"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/groupCodeEditText" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
